@@ -1,0 +1,166 @@
+
+Sub TickerOpenandclose()
+
+ Set current_sheet = ActiveSheet
+ 
+ 
+ Dim GRT_Increase As Double
+Dim GRT_Decrease As Double
+Dim GRT_Total As Integer
+GRT_Total = 0
+
+'find last row in sheet
+Dim last_row As Long
+
+last_row = current_sheet.Cells(current_sheet.Rows.Count, "A").End(xlUp).Row
+
+'set all data on column B as date
+Range("A1:a" & last_row).NumberFormat = "yyyy/mm/dd"
+
+'Find Open on day 1 and Close on last day values for each Ticker
+
+' Ticker Code
+Dim Ticker As String
+
+'Ticker open value
+Dim Ticker_open As Double
+
+'Ticker close value
+Dim Ticker_close As Double
+
+'Sum of total volume for a given ticker
+ Dim Ticker_Total As Double
+ 
+'Indetify first and last entry for a ticker
+
+Dim Ticker_first As Integer
+Dim ticker_last As Integer
+Dim ticker_count As Integer
+Dim yearly_change As Double
+Dim Percent_change As Double
+
+
+
+
+'Variable to assist in creating summary table
+ 
+ Dim summary_table_Row As Integer
+     summary_table_Row = 2
+     
+     
+'Identify Columns
+
+Range("J1") = "Ticker"
+Range("M1") = "Total Stock Volume"
+Range("K1") = "Yearly Change"
+Range("L1") = "Percent Change"
+
+ ' Loop through daily data
+  For i = 2 To last_row
+
+    ' Check if we are still within the same ticker, if it is not...
+    If Cells(i + 1, 1).Value <> Cells(i, 1).Value Then
+
+    
+      ' Set the Ticker
+      Ticker = Cells(i, 1).Value
+       
+      
+       'Determine Ticker Close Value
+      Ticker_close = Cells(i, 6).Value
+      
+     
+      'Determine Ticker open value
+      Ticker_open = Cells(i - ticker_count, 3)
+   
+      'Calculate Yearly change
+      yearly_change = Ticker_close - Ticker_open
+      
+      'Calculate Percent change
+      
+      Percent_change = (yearly_change / Ticker_open)
+   
+      ' Add to the Ticker Total
+      Ticker_Total = Ticker_Total + Cells(i, 7).Value
+    
+    
+    ' Print ticker Close in summary table (DELETE!!)
+          
+    Range("O" & summary_table_Row).Value = Ticker_close
+
+      ' Print the Ticker Total in a Summary
+      Range("J" & summary_table_Row).Value = Ticker
+
+      ' Print the Ticker Amount to the Summary Table
+      Range("M" & summary_table_Row).Value = Ticker_Total
+      
+      ' Print ticker open in summary table (DELETE!!)
+      Range("N" & summary_table_Row).Value = Ticker_open
+      
+      'print yearly change
+       Range("K" & summary_table_Row).Value = yearly_change
+      
+      'print Percent change W conditional formatting
+       Range("L" & summary_table_Row).Value = Percent_change
+       Range("L" & summary_table_Row).NumberFormat = "0.00%"
+        
+    ' Conditional formatting for percent change
+       If Percent_change > 0 Then
+                Range("L" & summary_table_Row).Interior.ColorIndex = 43
+            Else
+                Range("L" & summary_table_Row).Interior.ColorIndex = 3
+            End If
+ 
+  
+
+      'count how many entries (DELETE THIS LATER!)
+      
+      Range("P" & summary_table_Row).Value = ticker_count + 1
+
+      ' Add one to the summary table row
+      summary_table_Row = summary_table_Row + 1
+               
+    
+
+      
+      ' Reset the Ticker Total
+      Ticker_Total = 0
+      ticker_count = 0
+      
+      'Reset the yearly change
+      yearly_change = 0
+      
+
+    ' If the cell immediately following a row is the same brand...
+    Else
+
+      ' Add to the Ticker Total
+      Ticker_Total = Ticker_Total + Cells(i, 7).Value
+      ticker_count = ticker_count + 1
+    
+    
+    End If
+
+  Next i
+
+Call increase_decrease_total
+
+End Sub
+
+
+Sub increase_decrease_total()
+
+
+'print Headers
+
+Range("R2").Value = "Greatest % Increase"
+Range("R3").Value = "Greatest % Decrease"
+Range("R4").Value = "Greatest Total Volume"
+
+Range("S1").Value = "Ticker"
+Range("t1").Value = "Value"
+
+
+
+
+End Sub
