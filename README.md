@@ -10,3 +10,5 @@ Remove printing of unnecesary columns ( N; O; P) - Ticker Open, close and number
 Confirm if this solution is valid, as it it relies on correct sorting of dates (extarnal input)
 
 Next Step: Take on challenge component - application over multiple sheets and greatest increase, greatest decrease and greatest total volume challenge
+
+28/11 - Started on next item - First attempted solution with GRT_total compared with Total_volume in every variation causes overflow. REvise
